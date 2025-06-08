@@ -1,24 +1,31 @@
 import axios from 'axios';
-import type { Note } from '../types/note';
+// import type { Note } from '../types/note';
 axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
 interface FetchNotesParams {
-  search?: string;
-  page?: number;
+  search: string;
+  page: number;
 }
-export default async function fetchNotes({ search, page }: FetchNotesParams) {
-  try {
-    const response = await axios.get<Note[]>('/notes', {
+export const fetchNotes = async ({ search, page }: FetchNotesParams) => {
+  if (search !== '') {
+    return await axios.get('/notes', {
       headers: {
         Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
       },
       params: {
         search: search,
         page: page,
+        perPage: 12,
       },
     });
-    return console.log(response.data);
-  } catch (error) {
-    console.error('Error fetching notes:', error);
-    throw error;
+  } else {
+    return await axios.get('/notes', {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
+      },
+      params: {
+        page: page,
+        perPage: 12,
+      },
+    });
   }
-}
+};
