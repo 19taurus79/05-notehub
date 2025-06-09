@@ -19,9 +19,11 @@ export default function NoteModal({ onClose }: NoteModalProps) {
     };
 
     document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
     };
   }, [onClose]);
   return createPortal(
@@ -32,7 +34,7 @@ export default function NoteModal({ onClose }: NoteModalProps) {
       onClick={handleBackdropClick}
     >
       <div className={css.modal}>
-        <NoteForm />
+        <NoteForm onClose={onClose} />
       </div>
     </div>,
     document.body,

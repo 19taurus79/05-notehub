@@ -5,7 +5,7 @@ import { fetchNotes } from '../../services/noteService';
 import Pagination from '../Pagination/Pagination';
 import { useState } from 'react';
 import NoteModal from '../NoteModal/NoteModal';
-import SearchBar from '../SearchBox/SearchBar';
+import SearchBar from '../SearchBox/SearchBox';
 import { useDebounce } from 'use-debounce';
 export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,13 +15,14 @@ export default function App() {
   const [debouncedQuery] = useDebounce(searchQuery, 300);
   const { data } = useQuery({
     queryKey: ['notes', currentPage, debouncedQuery],
-    queryFn: () => fetchNotes({ search: searchQuery, page: currentPage }),
+    queryFn: () => fetchNotes({ search: debouncedQuery, page: currentPage }),
     placeholderData: keepPreviousData,
   });
-  const notes = data?.data.notes;
-  const totalPages = data?.data.totalPages;
+  // const notes = data?.data.notes;
+  const notes = data?.notes;
+  const totalPages = data?.totalPages;
   const togleModal = () => setIsModalOpen(!isModalOpen);
-  // console.log(data);
+  console.log(data);
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
@@ -30,18 +31,18 @@ export default function App() {
           onSearch={setSearchQuery}
           setPage={setCurrentPage}
         />
-        {
+        {totalPages && totalPages > 1 && (
           <Pagination
-            totalPages={totalPages}
+            totalPages={totalPages || 1}
             currentPage={currentPage}
             onPageChange={setCurrentPage}
           />
-        }
+        )}
         <button className={css.button} onClick={togleModal}>
           Create note +
         </button>
       </header>
-      {data && <NoteList notes={notes} />}
+      {notes && <NoteList notes={notes} />}
       {isModalOpen && <NoteModal onClose={togleModal} />}
     </div>
   );

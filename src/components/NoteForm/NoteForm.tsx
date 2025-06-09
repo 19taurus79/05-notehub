@@ -21,9 +21,12 @@ interface CreateNoteValues {
 const initialValues: CreateNoteValues = {
   title: '',
   content: '',
-  tag: '',
+  tag: 'Todo',
 };
-export default function NoteForm() {
+interface NoteFormProps {
+  onClose: () => void;
+}
+export default function NoteForm({ onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: createNote,
@@ -35,10 +38,12 @@ export default function NoteForm() {
     values: CreateNoteValues,
     { resetForm }: FormikHelpers<CreateNoteValues>,
   ) => {
-    mutation.mutate({ data: values });
+    mutation.mutate(values);
     // console.log(values);
     resetForm();
+    onClose();
   };
+  const handleCancel = () => onClose();
   return (
     <Formik
       initialValues={initialValues}
@@ -48,7 +53,13 @@ export default function NoteForm() {
       <Form className={css.form}>
         <div className={css.formGroup}>
           <label htmlFor="title">Title</label>
-          <Field id="title" type="text" name="title" className={css.input} />
+          <Field
+            id="title"
+            type="text"
+            name="title"
+            className={css.input}
+            autoFocus
+          />
           <ErrorMessage name="title" component="span" className={css.error} />
         </div>
 
@@ -58,7 +69,7 @@ export default function NoteForm() {
             id="content"
             as="textarea"
             name="content"
-            rows="8"
+            rows={8}
             className={css.textarea}
           />
           <ErrorMessage name="content" component="span" className={css.error} />
@@ -77,7 +88,11 @@ export default function NoteForm() {
         </div>
 
         <div className={css.actions}>
-          <button type="button" className={css.cancelButton}>
+          <button
+            type="button"
+            className={css.cancelButton}
+            onClick={handleCancel}
+          >
             Cancel
           </button>
           <button type="submit" className={css.submitButton} disabled={false}>
