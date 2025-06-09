@@ -10,7 +10,7 @@ import { useDebounce } from 'use-debounce';
 export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCreateTask, setIsCreateTask] = useState(false);
+  // const [isCreateTask, setIsCreateTask] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery] = useDebounce(searchQuery, 300);
   const { data } = useQuery({
