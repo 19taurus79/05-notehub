@@ -5,6 +5,13 @@ interface FetchNotesParams {
   search: string;
   page: number;
 }
+interface CreateNoteParams {
+  data: {
+    title: string;
+    content: string;
+    tag: string;
+  };
+}
 export const fetchNotes = async ({ search, page }: FetchNotesParams) => {
   if (search !== '') {
     return await axios.get('/notes', {
@@ -28,4 +35,20 @@ export const fetchNotes = async ({ search, page }: FetchNotesParams) => {
       },
     });
   }
+};
+
+export const createNote = async ({ data }: CreateNoteParams) => {
+  return await axios.post('/notes', data, {
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
+    },
+  });
+};
+
+export const deleteNote = async (id: number) => {
+  return await axios.delete(`/notes/${id}`, {
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
+    },
+  });
 };
