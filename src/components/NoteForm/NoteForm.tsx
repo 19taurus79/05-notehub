@@ -32,6 +32,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     mutationFn: createNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
+      onClose();
     },
   });
   const handleSubmit = (
@@ -39,9 +40,8 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     { resetForm }: FormikHelpers<CreateNoteValues>,
   ) => {
     mutation.mutate(values);
-    // console.log(values);
+    // console.log('mut', mutation);
     resetForm();
-    onClose();
   };
   const handleCancel = () => onClose();
   return (

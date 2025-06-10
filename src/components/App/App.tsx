@@ -5,7 +5,7 @@ import { fetchNotes } from '../../services/noteService';
 import Pagination from '../Pagination/Pagination';
 import { useState } from 'react';
 import NoteModal from '../NoteModal/NoteModal';
-import SearchBar from '../SearchBox/SearchBox';
+import SearchBox from '../SearchBox/SearchBox';
 import { useDebounce } from 'use-debounce';
 export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,17 +19,21 @@ export default function App() {
     placeholderData: keepPreviousData,
   });
   // const notes = data?.data.notes;
+  const handleSearch = (searchQuery: string) => {
+    setSearchQuery(searchQuery);
+    setCurrentPage(1);
+  };
   const notes = data?.notes;
   const totalPages = data?.totalPages;
   const togleModal = () => setIsModalOpen(!isModalOpen);
-  console.log(data);
+  // console.log(data);
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBar
+        <SearchBox
           value={searchQuery}
-          onSearch={setSearchQuery}
-          setPage={setCurrentPage}
+          onSearch={handleSearch}
+          // setPage={setCurrentPage}
         />
         {totalPages && totalPages > 1 && (
           <Pagination
