@@ -67,6 +67,5 @@ export const deleteNote = async (id: number): Promise<Note> => {
       Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
     },
   });
-  // console.log('del', res.data);
   return res.data;
 };

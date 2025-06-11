@@ -40,7 +40,6 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     { resetForm }: FormikHelpers<CreateNoteValues>,
   ) => {
     mutation.mutate(values);
-    // console.log('mut', mutation);
     resetForm();
   };
   const handleCancel = () => onClose();
@@ -95,7 +94,11 @@ export default function NoteForm({ onClose }: NoteFormProps) {
           >
             Cancel
           </button>
-          <button type="submit" className={css.submitButton} disabled={false}>
+          <button
+            type="submit"
+            className={css.submitButton}
+            disabled={mutation.isPending}
+          >
             Create note
           </button>
         </div>
